@@ -25,14 +25,24 @@ CREATE TABLE aluno(
 INSERT INTO aluno 
 			(nome, cpf, observacao, idade, dinheiro, altura, ativo, data_nascimento, hora_aula, data_matricula) 
 		VALUES 
-			('Leonardo', '42152213823', 'Lorem ipsum dolor sit amet', 35, 350.5, 1.81, true, '1997-05-08', '17:30:00', '2022-08-12 12:32:45');
+			('Leonardo', '42152213823', 'Lorem ipsum dolor sit amet', 64, 350.5, 1.81, true, '1997-05-08', '17:30:00', '2022-08-12 12:32:45');
 
 INSERT INTO aluno 
 			(nome, cpf, observacao, idade, dinheiro, altura, ativo, data_nascimento, hora_aula, data_matricula) 
 		VALUES 
-			('Josemiaz', '12345678911', 'Lorem ipsum dolor sit amet', 25, 30.5, 1.41, true, '1998-06-08', '14:10:00', '2022-08-12 12:35:45');
+			('Tiroleza', '12345678911', 'Lorem ipsum dolor sit amet', 25, 30.5, 1.41, true, '1998-06-08', '14:10:00', '2022-08-12 12:35:45');
 			
--- READ - Read information from the table
+INSERT INTO aluno
+			(nome)
+		VALUES
+			('Tederico');
+			
+INSERT INTO aluno
+			(nome)
+		VALUES
+			('Tantrico');
+			
+-- READ - Read information from the table - Busca de informações
 
 SELECT * FROM aluno WHERE id = 3;
 
@@ -54,7 +64,33 @@ SELECT * FROM aluno WHERE nome LIKE 'J%';
 
 SELECT * FROM aluno WHERE nome LIKE '%z';
 
-SELET * FROM aluno WHERE
+SELECT * FROM aluno WHERE cpf IS null;
+
+SELECT * FROM aluno WHERE cpf IS NOT null;
+
+SELECT * FROM aluno WHERE idade > 25;
+
+SELECT * FROM aluno WHERE idade BETWEEN 24 AND 36;
+
+SELECT * FROM aluno WHERE data_nascimento BETWEEN '1997-01-01' AND '1997-12-31';
+
+SELECT * FROM aluno WHERE data_nascimento BETWEEN '1998-01-01' AND '1998-12-31';
+
+SELECT * FROM aluno WHERE ativo IS null;
+
+SELECT * FROM aluno WHERE ativo IS NOT null;
+
+SELECT * FROM aluno WHERE ativo IS false;
+
+SELECT nome, cpf FROM aluno WHERE idade IS null;
+
+SELECT * FROM aluno WHERE nome LIKE 'T%' AND cpf IS NOT NULL;
+
+SELECT * FROM aluno WHERE nome LIKE 'Leonardo' OR nome LIKE 'Tim Maia' OR nome LIKE 'Tiroleza';
+
+SELECT nome, cpf, idade FROM aluno WHERE nome LIKE 'Leonardo' AND idade > 40; 
+
+SELECT nome, cpf, idade FROM aluno WHERE nome LIKE 'Leonardo' AND idade < 40; 
 
 SELECT * FROM aluno;
 
