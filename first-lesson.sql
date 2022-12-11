@@ -25,12 +25,12 @@ CREATE TABLE aluno(
 INSERT INTO aluno 
 			(nome, cpf, observacao, idade, dinheiro, altura, ativo, data_nascimento, hora_aula, data_matricula) 
 		VALUES 
-			('Leonardo', '42152213823', 'Lorem ipsum dolor sit amet', 64, 350.5, 1.81, true, '1997-05-08', '17:30:00', '2022-08-12 12:32:45');
+			('Leonardo', '12345678911', 'Lorem ipsum dolor sit amet', 64, 350.5, 1.81, true, '1997-05-08', '17:30:00', '2022-08-12 12:32:45');
 
 INSERT INTO aluno 
 			(nome, cpf, observacao, idade, dinheiro, altura, ativo, data_nascimento, hora_aula, data_matricula) 
 		VALUES 
-			('Tiroleza', '12345678911', 'Lorem ipsum dolor sit amet', 25, 30.5, 1.41, true, '1998-06-08', '14:10:00', '2022-08-12 12:35:45');
+			('Tiroleza', '98765432100', 'Lorem ipsum dolor sit amet', 25, 30.5, 1.41, true, '1998-06-08', '14:10:00', '2022-08-12 12:35:45');
 			
 INSERT INTO aluno
 			(nome)
@@ -99,7 +99,7 @@ SELECT * FROM escola;
 -- UPDATE - Update information of the table
 
 UPDATE aluno SET nome = 'Burina Rafaela dos Santos Cardozo',
-        cpf = '42152213823',
+        cpf = '21354687911',
         observacao = 'Lorem ipsum dolor sit amet',
         idade = 40,
         dinheiro = 30.5,
