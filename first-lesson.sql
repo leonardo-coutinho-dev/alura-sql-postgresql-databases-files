@@ -6,6 +6,8 @@ DROP DATABASE alura;
 
 -- CREATE TABLE
 
+DROP TABLE aluno;
+
 CREATE TABLE aluno(
     id SERIAL,
         nome VARCHAR(255),
@@ -20,7 +22,37 @@ CREATE TABLE aluno(
         data_matricula TIMESTAMP
 );
 
+CREATE TABLE aluno(
+	id SERIAL PRIMARY KEY,
+	nome VARCHAR(255) NOT NULL
+);
+
+DROP TABLE aluno_curso;
+
+CREATE TABLE aluno_curso (
+	aluno_id INTEGER,
+	curso_id INTEGER,
+	PRIMARY KEY(aluno_id, curso_id),
+	
+	FOREIGN KEY(aluno_id)
+	REFERENCES aluno (id),
+	
+	FOREIGN KEY(curso_id)
+	REFERENCES curso (id)
+);
+
+DROP TABLE curso;
+
+CREATE TABLE curso(
+	id INTEGER NOT NULL UNIQUE,
+	nome VARCHAR(255) NOT NULL
+);
+
 -- CREATE - Insert information in the columns of the table
+
+INSERT INTO aluno (nome) VALUES ('Leonardo');
+
+INSERT INTO aluno (nome) VALUES ('Odranoel');
 
 INSERT INTO aluno 
 			(nome, cpf, observacao, idade, dinheiro, altura, ativo, data_nascimento, hora_aula, data_matricula) 
@@ -41,8 +73,101 @@ INSERT INTO aluno
 			(nome)
 		VALUES
 			('Tantrico');
+
+INSERT INTO aluno
+			(nome)
+		VALUES
+			('Nico');
 			
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (1, 1);
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (2, 1);
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (3, 1);
+
+-- ERRO: CHAVE ESTRANGEIRA
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (2, 2);
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (3, 5);
+
+--
+
+INSERT INTO curso (id, nome) VALUES (NULL, NULL);
+
+INSERT INTO curso (id, nome) VALUES (1, 'HTML');
+
+INSERT INTO curso (id, nome) VALUES (2, 'JavaScript');
+
+INSERT INTO curso (id, nome) VALUES (3, 'CSS');
+
 -- READ - Read information from the table - Busca de informações
+
+-- SELECT COM JOIN
+
+SELECT 
+	aluno.nome as "Nome do Aluno", 
+	curso.nome as "Nome do Curso" 
+	FROM aluno 
+	JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id 
+	JOIN curso ON curso.id = aluno_curso.curso_id;
+
+----- SELECT COM LEFT JOIN
+
+SELECT 
+	aluno.nome as "Nome do Aluno", 
+	curso.nome as "Nome do Curso" 
+	FROM aluno 
+	LEFT JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id 
+	LEFT JOIN curso ON curso.id = aluno_curso.curso_id;
+	
+------ SELECT COM RIGHT JOIN
+
+SELECT 
+	aluno.nome as "Nome do Aluno", 
+	curso.nome as "Nome do Curso" 
+	FROM aluno 
+	RIGHT JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id 
+	RIGHT JOIN curso ON curso.id = aluno_curso.curso_id;
+
+------ SELECT COM FULL JOIN
+
+SELECT 
+	aluno.nome as "Nome do Aluno", 
+	curso.nome as "Nome do Curso" 
+	FROM aluno 
+	FULL JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id 
+	FULL JOIN curso ON curso.id = aluno_curso.curso_id;
+
+------
+
+SELECT 
+	aluno.nome as "Nome do Aluno", 
+	curso.nome as "Nome do Curso" 
+	FROM aluno 
+	CROSS JOIN curso;
+
+------ 
+
+SELECT * FROM aluno;
+
+SELECT * FROM aluno_curso;
+
+SELECT * FROM aluno WHERE id = 1;
+
+SELECT * FROM aluno WHERE id = 2;
+
+SELECT * FROM aluno WHERE id = 3;
+
+SELECT * FROM curso WHERE id = 1;
+
+SELECT * FROM curso WHERE id = 2;
+
+SELECT * FROM curso WHERE id = 3;
+
+-----
+
+SELECT * FROM curso;
 
 SELECT * FROM aluno WHERE id = 3;
 
@@ -91,10 +216,6 @@ SELECT * FROM aluno WHERE nome LIKE 'Leonardo' OR nome LIKE 'Tim Maia' OR nome L
 SELECT nome, cpf, idade FROM aluno WHERE nome LIKE 'Leonardo' AND idade > 40; 
 
 SELECT nome, cpf, idade FROM aluno WHERE nome LIKE 'Leonardo' AND idade < 40; 
-
-SELECT * FROM aluno;
-
-SELECT * FROM escola;
 			
 -- UPDATE - Update information of the table
 
@@ -109,9 +230,16 @@ UPDATE aluno SET nome = 'Burina Rafaela dos Santos Cardozo',
         hora_aula = '17:50:00',
         data_matricula = '2022-12-08 16:40:00'
 		WHERE id = 2;
+		
+UPDATE aluno SET nome = 'Dogofredo'
+		WHERE id = 3;
 
 -- DELETE - Delete informatiom from the table
 
 DELETE FROM aluno WHERE id = 1;
 
 DELETE FROM aluno WHERE id = 2;
+
+DELETE FROM curso WHERE id = 1;
+
+DELETE FROM curso WHERE id = 2;
