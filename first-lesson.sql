@@ -35,7 +35,11 @@ CREATE TABLE aluno_curso (
 	PRIMARY KEY(aluno_id, curso_id),
 	
 	FOREIGN KEY(aluno_id)
-	REFERENCES aluno (id),
+	REFERENCES aluno (id)
+	-- ON DELETE RESTRICT (DEFAULT)
+	ON DELETE CASCADE
+	-- ON UPDATE RESTRICT (DEFAULT)
+	ON UPDATE CASCADE,
 	
 	FOREIGN KEY(curso_id)
 	REFERENCES curso (id)
@@ -46,6 +50,15 @@ DROP TABLE curso;
 CREATE TABLE curso(
 	id INTEGER NOT NULL UNIQUE,
 	nome VARCHAR(255) NOT NULL
+);
+
+DROP TABLE funcionarios;
+
+CREATE TABLE funcionarios(
+	id SERIAL PRIMARY KEY,
+	matricula VARCHAR(10),
+	nome VARCHAR(255),
+	sobrenome VARCHAR(255)
 );
 
 -- CREATE - Insert information in the columns of the table
@@ -67,7 +80,7 @@ INSERT INTO aluno
 INSERT INTO aluno
 			(nome)
 		VALUES
-			('Tederico');
+			('Rivaldo');
 			
 INSERT INTO aluno
 			(nome)
@@ -83,7 +96,9 @@ INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (1, 1);
 
 INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (2, 1);
 
-INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (3, 1);
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (3, 2);
+
+INSERT INTO aluno_curso (aluno_id, curso_id) VALUES (4, 3);
 
 -- ERRO: CHAVE ESTRANGEIRA
 
@@ -101,9 +116,27 @@ INSERT INTO curso (id, nome) VALUES (2, 'JavaScript');
 
 INSERT INTO curso (id, nome) VALUES (3, 'CSS');
 
+-- FUNCIONARIOS
+
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M001', 'José', 'Malaquias');
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M002', 'Estevão', 'Armando');
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M003', 'Rubens', 'Senior');
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M004', 'Malafaia', 'Jumento');
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M005', 'Bin', 'Laden');
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M006', 'Exor', 'Cista');
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M007', 'Exor', 'Zista');
+
 -- READ - Read information from the table - Busca de informações
 
 -- SELECT COM JOIN
+
+SELECT * FROM funcionarios;
+
+SELECT * FROM funcionarios ORDER BY nome, id DESC;
+
+SELECT * FROM funcionarios ORDER BY 3, 4 DESC;
+
+SELECT * FROM funcionarios ORDER BY id ASC LIMIT 5 OFFSET 3;
 
 SELECT 
 	aluno.nome as "Nome do Aluno", 
@@ -111,6 +144,18 @@ SELECT
 	FROM aluno 
 	JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id 
 	JOIN curso ON curso.id = aluno_curso.curso_id;
+
+----- SELECT COM INNER JOIN
+
+SELECT
+	aluno.nome as "Nome do aluno",
+	aluno_curso.curso_id as "ID do curso",
+	curso.nome as "Nome do curso"
+	FROM aluno
+	INNER JOIN aluno_curso
+	ON aluno.id = aluno_curso.aluno_id
+	INNER JOIN curso
+	ON aluno_curso.curso_id = curso.id;
 
 ----- SELECT COM LEFT JOIN
 
@@ -133,11 +178,14 @@ SELECT
 ------ SELECT COM FULL JOIN
 
 SELECT 
-	aluno.nome as "Nome do Aluno", 
-	curso.nome as "Nome do Curso" 
+	aluno.nome as "Nome do Aluno",
+	aluno.id   as "ID do aluno",
+	curso.nome as "Nome do Curso",
+	curso.id   as "ID do curso"
 	FROM aluno 
 	FULL JOIN aluno_curso ON aluno_curso.aluno_id = aluno.id 
-	FULL JOIN curso ON curso.id = aluno_curso.curso_id;
+	FULL JOIN curso ON curso.id = aluno_curso.curso_id
+	ORDER BY curso.nome, aluno.id DESC;
 
 ------
 
@@ -153,6 +201,8 @@ SELECT * FROM aluno;
 
 SELECT * FROM aluno_curso;
 
+SELECT * FROM curso;
+
 SELECT * FROM aluno WHERE id = 1;
 
 SELECT * FROM aluno WHERE id = 2;
@@ -166,8 +216,6 @@ SELECT * FROM curso WHERE id = 2;
 SELECT * FROM curso WHERE id = 3;
 
 -----
-
-SELECT * FROM curso;
 
 SELECT * FROM aluno WHERE id = 3;
 
@@ -233,6 +281,9 @@ UPDATE aluno SET nome = 'Burina Rafaela dos Santos Cardozo',
 		
 UPDATE aluno SET nome = 'Dogofredo'
 		WHERE id = 3;
+		
+UPDATE aluno SET id = 1
+		WHERE id = 20;
 
 -- DELETE - Delete informatiom from the table
 
@@ -243,3 +294,57 @@ DELETE FROM aluno WHERE id = 2;
 DELETE FROM curso WHERE id = 1;
 
 DELETE FROM curso WHERE id = 2;
+
+-- FUNÇÕES DE AGREGAÇÃO
+
+-- COUNT - RETORNA A QUANTIDADE DE REGISTROS
+-- SUM   - RETORNA A SOMA DOS REGISTROS
+-- MAX   - RETORNA O MAIOR VALOR DOS REGISTROS
+-- MIN   - RETORNA O MENOR VALOR DOS REGISTROS
+-- AVG   - RETORNA A MÉDIA DOS REGISTROS
+
+SELECT COUNT(id), SUM(id), MAX(id), MIN(id), ROUND(AVG(id), 2) FROM funcionarios;
+
+-- AGRUPANDO CONSULTAS
+
+SELECT * FROM funcionarios;
+
+SELECT DISTINCT nome, sobrenome FROM funcionarios ORDER BY nome;
+
+SELECT nome, sobrenome, COUNT(id) FROM funcionarios GROUP BY 1, 2 ORDER BY nome;
+
+-- QUANTIDADE DE ALUNOS POR CURSO
+
+SELECT curso.nome,
+	COUNT(aluno.id)
+	FROM aluno
+	JOIN aluno_curso ON aluno.id = aluno_curso.aluno_id
+	JOIN curso ON curso.id = aluno_curso.curso_id
+	GROUP BY 1
+	ORDER BY 1;
+	
+-- FILTRAR CURSO POR QUANTIDADE DE ALUNOS
+	
+SELECT curso.nome,
+	COUNT (aluno.id)
+	FROM curso
+	LEFT JOIN aluno_curso ON aluno_curso.curso_id = curso.id
+	LEFT JOIN aluno ON aluno.id = aluno_curso.aluno_id
+	GROUP BY 1
+	HAVING COUNT (aluno.id) = 2;
+	
+-- NOMES DUPLICADOS
+	
+SELECT nome,
+	COUNT(id)
+	FROM funcionarios
+	GROUP BY nome
+	HAVING COUNT(id) > 1;
+
+-- NOMES NÃO DUPLICADOS
+	
+SELECT nome,
+	COUNT(id)
+	FROM funcionarios
+	GROUP BY nome
+	HAVING COUNT(id) = 1;
