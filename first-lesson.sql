@@ -121,7 +121,7 @@ INSERT INTO curso (id, nome) VALUES (3, 'CSS');
 INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M001', 'José', 'Malaquias');
 INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M002', 'Estevão', 'Armando');
 INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M003', 'Rubens', 'Senior');
-INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M004', 'Malafaia', 'Jumento');
+INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M004', 'Cavalo', 'Jumento');
 INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M005', 'Bin', 'Laden');
 INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M006', 'Exor', 'Cista');
 INSERT INTO funcionarios (matricula, nome, sobrenome) VALUES ('M007', 'Exor', 'Zista');
@@ -267,7 +267,7 @@ SELECT nome, cpf, idade FROM aluno WHERE nome LIKE 'Leonardo' AND idade < 40;
 			
 -- UPDATE - Update information of the table
 
-UPDATE aluno SET nome = 'Burina Rafaela dos Santos Cardozo',
+UPDATE aluno SET nome = 'Lorem Ipsum dolor',
         cpf = '21354687911',
         observacao = 'Lorem ipsum dolor sit amet',
         idade = 40,
